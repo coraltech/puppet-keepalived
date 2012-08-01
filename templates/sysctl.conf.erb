@@ -1,0 +1,8 @@
+
+net.ipv4.ip_nonlocal_bind=1
+
+<% if sysctl_directives.is_a? Array -%>
+<%   sysctl_directives.each do |directive| -%>
+<%= directive %>
+<%   end -%>
+<% end -%>

@@ -1,0 +1,48 @@
+# Settings for notifications
+# For available options, see: http://www.keepalived.org/pdf/UserGuide.pdf
+
+<% if global_definitions.is_a? Hash -%>
+<%   keepalived_block('global_defs', global_definitions).lines.to_a.each do |line| -%>
+<%= line %>
+<%   end -%>
+<% end -%>
+
+<% if virtual_servers.is_a? Array -%>
+<%   virtual_servers.each do |data| -%>
+<%     if data.is_a? Hash -%>
+<%       keepalived_block('virtual_server', data).lines.to_a.each do |line| -%>
+<%= line %>
+<%       end -%>
+<%     end -%>
+<%   end -%>
+<% end -%>
+
+<% if vrrp_sync_groups.is_a? Array -%>
+<%   vrrp_sync_groups.each do |data| -%>
+<%     if data.is_a? Hash -%>
+<%       keepalived_block('vrrp_sync_group', data).lines.to_a.each do |line| -%>
+<%= line %>
+<%       end -%>
+<%     end -%>
+<%   end -%>
+<% end -%>
+
+<% if vrrp_instances.is_a? Array -%>
+<%   vrrp_instances.each do |data| -%>
+<%     if data.is_a? Hash -%>
+<%       keepalived_block('vrrp_instance', data).lines.to_a.each do |line| -%>
+<%= line %>
+<%       end -%>
+<%     end -%>
+<%   end -%>
+<% end -%>
+
+<% if vrrp_scripts.is_a? Array -%>
+<%   vrrp_scripts.each do |data| -%>
+<%     if data.is_a? Hash -%>
+<%       keepalived_block('vrrp_script', data).lines.to_a.each do |line| -%>
+<%= line %>
+<%       end -%>
+<%     end -%>
+<%   end -%>
+<% end -%>
