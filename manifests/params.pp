@@ -7,24 +7,28 @@ class keepalived::params {
   # General configurations
 
   if $::hiera_ready {
-    $keepalived_package_ensure  = hiera('keepalived_package_ensure', $keepalived::default::keepalived_package_ensure)
-    $keepalived_service_ensure  = hiera('keepalived_service_ensure', $keepalived::default::keepalived_service_ensure)
-    $sysctl_directives          = hiera_hash('keepalived_sysctl_directives', $keepalived::default::sysctl_directives)
-    $global_definitions         = hiera_hash('keepalived_global_definitions', $keepalived::default::global_definitions)
-    $virtual_servers            = hiera_array('keepalived_virtual_servers', $keepalived::default::virtual_servers)
-    $vrrp_sync_groups           = hiera_array('keepalived_vrrp_sync_groups', $keepalived::default::vrrp_sync_groups)
-    $vrrp_instances             = hiera_array('keepalived_vrrp_instances', $keepalived::default::vrrp_instances)
-    $vrrp_scripts               = hiera_array('keepalived_vrrp_scripts', $keepalived::default::vrrp_scripts)
+    $keepalived_source           = hiera('keepalived_source', $keepalived::default::keepalived_source)
+    $keepalived_revision         = hiera('keepalived_revision', $keepalived::default::keepalived_revision)
+    $keepalived_service_ensure   = hiera('keepalived_service_ensure', $keepalived::default::keepalived_service_ensure)
+    $firewall_ports              = hiera('keepalived_firewall_ports', $keepalived::default::firewall_ports)
+    $sysctl_directives           = hiera_hash('keepalived_sysctl_directives', $keepalived::default::sysctl_directives)
+    $global_definitions          = hiera_hash('keepalived_global_definitions', $keepalived::default::global_definitions)
+    $virtual_servers             = hiera_array('keepalived_virtual_servers', $keepalived::default::virtual_servers)
+    $vrrp_sync_groups            = hiera_array('keepalived_vrrp_sync_groups', $keepalived::default::vrrp_sync_groups)
+    $vrrp_instances              = hiera_array('keepalived_vrrp_instances', $keepalived::default::vrrp_instances)
+    $vrrp_scripts                = hiera_array('keepalived_vrrp_scripts', $keepalived::default::vrrp_scripts)
   }
   else {
-    $keepalived_package_ensure  = $keepalived::default::keepalived_package_ensure
-    $keepalived_service_ensure  = $keepalived::default::keepalived_service_ensure
-    $sysctl_directives          = $keepalived::default::sysctl_directives
-    $global_definitions         = $keepalived::default::global_definitions
-    $virtual_servers            = $keepalived::default::virtual_servers
-    $vrrp_sync_groups           = $keepalived::default::vrrp_sync_groups
-    $vrrp_instances             = $keepalived::default::vrrp_instances
-    $vrrp_scripts               = $keepalived::default::vrrp_scripts
+    $keepalived_source           = $keepalived::default::keepalived_source
+    $keepalived_revision         = $keepalived::default::keepalived_revision
+    $keepalived_service_ensure   = $keepalived::default::keepalived_service_ensure
+    $firewall_ports              = $keepalived::default::firewall_ports
+    $sysctl_directives           = $keepalived::default::sysctl_directives
+    $global_definitions          = $keepalived::default::global_definitions
+    $virtual_servers             = $keepalived::default::virtual_servers
+    $vrrp_sync_groups            = $keepalived::default::vrrp_sync_groups
+    $vrrp_instances              = $keepalived::default::vrrp_instances
+    $vrrp_scripts                = $keepalived::default::vrrp_scripts
   }
 
   #-----------------------------------------------------------------------------
@@ -32,7 +36,7 @@ class keepalived::params {
 
   case $::operatingsystem {
     debian, ubuntu: {
-      $os_keepalived_package = 'keepalived'
+      $os_keepalived_repo    = '/usr/local/lib/keepalived'
       $os_keepalived_service = 'keepalived'
 
       $os_config                 = '/etc/keepalived/keepalived.conf'
