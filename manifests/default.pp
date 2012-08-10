@@ -1,8 +1,9 @@
 
 class keepalived::default {
   $keepalived_source           = 'git://github.com/coraltech/keepalived.git'
-  $keepalived_revision         = 'master'
+  $keepalived_revision         = 'coraltech'
   $keepalived_service_ensure   = 'running'
+  $dev_ensure                  = 'present'
   $firewall_ports              = []
   $sysctl_directives           = {}
   $global_definitions          = {}

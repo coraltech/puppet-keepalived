@@ -1,7 +1,8 @@
 {
   "keepalived_source" : "git://github.com/coraltech/keepalived.git",
-  "keepalived_revision" : "master",
+  "keepalived_revision" : "coraltech",
   "keepalived_service_ensure" : "running",
+  "keepalived_dev_ensure" : "present",
   "keepalived_firewall_ports" : [],
   "keepalived_sysctl_directives" : {},
   "keepalived_global_definitions" : {},
