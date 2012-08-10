@@ -1,17 +1,52 @@
 # For available options, see: http://www.keepalived.org/pdf/UserGuide.pdf
-
+<%
+class KeepalivedBlock  
+  def self.render(type, input, spacer = '')
+    output = ''
+        
+    if input.is_a? Hash or input.is_a? Array
+       
+      name = (input.is_a?(Hash) ? input['name'] : '')
+      input.delete('name')
+       
+      if name.is_a? Array          
+        name = name.flatten.join(' ')          
+      elsif ! name.is_a? String
+        name = ''
+      end
+        
+      output << "#{spacer}#{type} #{name} {\n"
+ 
+      if input.is_a? Hash        
+        input.each do |keyword, data|
+          if data.is_a? Hash or data.is_a? Array
+            output << spacer << render(keyword, data, "#{spacer}  ") << "\n"
+              
+          elsif data.is_a? String
+            output << "#{spacer}  #{keyword} #{data}\n"
+          end
+        end
+      else
+        input.each do |data|
+          output << "#{spacer}  #{data}\n"
+        end  
+      end
+        
+      output << spacer << "}"
+    end
+  
+    return output  
+  end  
+end
+-%>
 <% if global_definitions.is_a? Hash -%>
-<%   keepalived_block('global_defs', global_definitions).lines.to_a.each do |line| -%>
-<%= line %>
-<%   end -%>
+<%= KeepalivedBlock.render('global_defs', global_definitions) %>
 <% end -%>
 
 <% if virtual_servers.is_a? Array -%>
 <%   virtual_servers.each do |data| -%>
 <%     if data.is_a? Hash -%>
-<%       keepalived_block('virtual_server', data).lines.to_a.each do |line| -%>
-<%= line %>
-<%       end -%>
+<%= KeepalivedBlock.render('virtual_server', data) %>
 <%     end -%>
 <%   end -%>
 <% end -%>
@@ -19,9 +54,7 @@
 <% if vrrp_sync_groups.is_a? Array -%>
 <%   vrrp_sync_groups.each do |data| -%>
 <%     if data.is_a? Hash -%>
-<%       keepalived_block('vrrp_sync_group', data).lines.to_a.each do |line| -%>
-<%= line %>
-<%       end -%>
+<%= KeepalivedBlock.render('vrrp_sync_group', data) %>
 <%     end -%>
 <%   end -%>
 <% end -%>
@@ -29,9 +62,7 @@
 <% if vrrp_instances.is_a? Array -%>
 <%   vrrp_instances.each do |data| -%>
 <%     if data.is_a? Hash -%>
-<%       keepalived_block('vrrp_instance', data).lines.to_a.each do |line| -%>
-<%= line %>
-<%       end -%>
+<%= KeepalivedBlock.render('vrrp_instance', data) %>
 <%     end -%>
 <%   end -%>
 <% end -%>
@@ -39,9 +70,7 @@
 <% if vrrp_scripts.is_a? Array -%>
 <%   vrrp_scripts.each do |data| -%>
 <%     if data.is_a? Hash -%>
-<%       keepalived_block('vrrp_script', data).lines.to_a.each do |line| -%>
-<%= line %>
-<%       end -%>
+<%= KeepalivedBlock.render('vrrp_script', data) %>
 <%     end -%>
 <%   end -%>
 <% end -%>
