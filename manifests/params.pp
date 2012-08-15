@@ -1,64 +1,36 @@
 
-class keepalived::params {
+class keepalived::params inherits keepalived::default {
 
-  include keepalived::default
+  $repo                      = module_param('repo')
+  $source                    = module_param('source')
+  $revision                  = module_param('revision')
+  $service                   = module_param('service')
+  $service_ensure            = module_param('service_ensure')
 
-  #-----------------------------------------------------------------------------
-  # General configurations
+  $dev_packages              = module_param('dev_packages')
+  $dev_ensure                = module_param('dev_ensure')
 
-  if $::hiera_ready {
-    $keepalived_source           = hiera('keepalived_source', $keepalived::default::keepalived_source)
-    $keepalived_revision         = hiera('keepalived_revision', $keepalived::default::keepalived_revision)
-    $keepalived_service_ensure   = hiera('keepalived_service_ensure', $keepalived::default::keepalived_service_ensure)
-    $dev_ensure                  = hiera('keepalived_dev_ensure', $keepalived::default::dev_ensure)
-    $firewall_ports              = hiera('keepalived_firewall_ports', $keepalived::default::firewall_ports)
-    $sysctl_directives           = hiera_hash('keepalived_sysctl_directives', $keepalived::default::sysctl_directives)
-    $global_definitions          = hiera_hash('keepalived_global_definitions', $keepalived::default::global_definitions)
-    $virtual_servers             = hiera_array('keepalived_virtual_servers', $keepalived::default::virtual_servers)
-    $vrrp_sync_groups            = hiera_array('keepalived_vrrp_sync_groups', $keepalived::default::vrrp_sync_groups)
-    $vrrp_instances              = hiera_array('keepalived_vrrp_instances', $keepalived::default::vrrp_instances)
-    $vrrp_scripts                = hiera_array('keepalived_vrrp_scripts', $keepalived::default::vrrp_scripts)
-  }
-  else {
-    $keepalived_source           = $keepalived::default::keepalived_source
-    $keepalived_revision         = $keepalived::default::keepalived_revision
-    $keepalived_service_ensure   = $keepalived::default::keepalived_service_ensure
-    $dev_ensure                  = $keepalived::default::dev_ensure
-    $firewall_ports              = $keepalived::default::firewall_ports
-    $sysctl_directives           = $keepalived::default::sysctl_directives
-    $global_definitions          = $keepalived::default::global_definitions
-    $virtual_servers             = $keepalived::default::virtual_servers
-    $vrrp_sync_groups            = $keepalived::default::vrrp_sync_groups
-    $vrrp_instances              = $keepalived::default::vrrp_instances
-    $vrrp_scripts                = $keepalived::default::vrrp_scripts
-  }
+  $build_options             = module_param('build_options')
+  $build_package_init_script = module_param('build_package_init_script')
+  $init_script               = module_param('init_script')
+  $run_level_script          = module_param('run_level_script')
 
-  #-----------------------------------------------------------------------------
-  # Operating system specific configurations
+  #---
 
-  case $::operatingsystem {
-    debian, ubuntu: {
-      $os_keepalived_repo           = '/usr/local/lib/keepalived'
-      $os_keepalived_service        = 'keepalived'
+  $firewall_ports            = module_param('firewall_ports')
 
-      $os_dev_packages              = []
+  $config_dir                = module_param('config_dir')
+  $config_file               = module_param('config_file')
+  $config_template           = module_param('config_template')
 
-      $os_build_options             = '--prefix=""'
-      $os_build_package_init_script = '/etc/rc.d/init.d/keepalived'
-      $os_init_script               = '/etc/init.d/keepalived'
-      $os_run_level_script          = '/etc/rc3.d/S99keepalived'
+  $sysctl_config             = module_param('sysctl_config')
+  $sysctl_config_template    = module_param('sysctl_config_template')
+  $sysctl_reload_command     = module_param('sysctl_reload_command')
+  $sysctl_directives         = module_hash('sysctl_directives')
 
-      $os_config_dir                = '/etc/keepalived'
-      $os_config_file               = 'keepalived.conf'
-      $os_config_template           = 'keepalived/keepalived.conf.erb'
-
-      $os_sysctl_config             = '/etc/sysctl.d/keepalived.conf'
-      $os_sysctl_config_template    = 'keepalived/sysctl.conf.erb'
-
-      $os_sysctl_reload_command     = 'sysctl -p'
-    }
-    default: {
-      fail("The keepalived module is not currently supported on ${::operatingsystem}")
-    }
-  }
+  $global_definitions        = module_hash('global_definitions')
+  $virtual_servers           = module_array('virtual_servers')
+  $vrrp_sync_groups          = module_array('vrrp_sync_groups')
+  $vrrp_instances            = module_array('vrrp_instances')
+  $vrrp_scripts              = module_array('vrrp_scripts')
 }
