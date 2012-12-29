@@ -7,7 +7,7 @@ class keepalived::params inherits keepalived::default {
   $service                   = module_param('service')
   $service_ensure            = module_param('service_ensure')
 
-  $dev_packages              = module_param('dev_packages')
+  $dev_packages              = module_array('dev_packages')
   $dev_ensure                = module_param('dev_ensure')
 
   $build_options             = module_param('build_options')
@@ -17,7 +17,7 @@ class keepalived::params inherits keepalived::default {
 
   #---
 
-  $firewall_ports            = module_param('firewall_ports')
+  $firewall_ports            = module_array('firewall_ports')
 
   $config_dir                = module_param('config_dir')
   $config_file               = module_param('config_file')

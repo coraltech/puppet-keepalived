@@ -122,7 +122,7 @@ class keepalived (
   #-----------------------------------------------------------------------------
   # Services
 
-  if ! ( empty($virtual_servers) or empty($vrrp_instances) ) {
+  if ! ( empty($virtual_servers) and empty($vrrp_instances) ) {
     $service_ensure_real = $service_ensure
   }
   else {
