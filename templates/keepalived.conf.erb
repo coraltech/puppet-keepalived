@@ -1,76 +1,12 @@
 # For available options, see: http://www.keepalived.org/pdf/UserGuide.pdf
-<%
-class KeepalivedBlock  
-  def self.render(type, input, spacer = '')
-    output = ''
-        
-    if input.is_a? Hash or input.is_a? Array
-       
-      name = (input.is_a?(Hash) ? input['name'] : '')
-      input.delete('name')
-       
-      if name.is_a? Array          
-        name = name.flatten.join(' ')          
-      elsif ! name.is_a? String
-        name = ''
-      end
-        
-      output << "#{spacer}#{type} #{name} {\n"
- 
-      if input.is_a? Hash        
-        input.each do |keyword, data|
-          if data.is_a? Hash or data.is_a? Array
-            output << spacer << render(keyword, data, "#{spacer}  ") << "\n"
-              
-          elsif data.is_a? String
-            output << "#{spacer}  #{keyword} #{data}\n"
-          end
-        end
-      else
-        input.each do |data|
-          output << "#{spacer}  #{data}\n"
-        end  
-      end
-        
-      output << spacer << "}"
-    end
-  
-    return output  
-  end  
-end
--%>
-<% if global_definitions.is_a? Hash -%>
-<%= KeepalivedBlock.render('global_defs', global_definitions) %>
-<% end -%>
+<% require File.join(File.dirname(__FILE__), 'template') -%>
 
-<% if virtual_servers.is_a? Array -%>
-<%   virtual_servers.each do |data| -%>
-<%     if data.is_a? Hash -%>
-<%= KeepalivedBlock.render('virtual_server', data) %>
-<%     end -%>
-<%   end -%>
-<% end -%>
+<%= KeepalivedTemplate.render('global_defs', global_definitions) %>
 
-<% if vrrp_sync_groups.is_a? Array -%>
-<%   vrrp_sync_groups.each do |data| -%>
-<%     if data.is_a? Hash -%>
-<%= KeepalivedBlock.render('vrrp_sync_group', data) %>
-<%     end -%>
-<%   end -%>
-<% end -%>
+<%= KeepalivedTemplate.render('virtual_server', virtual_servers) %>
 
-<% if vrrp_instances.is_a? Array -%>
-<%   vrrp_instances.each do |data| -%>
-<%     if data.is_a? Hash -%>
-<%= KeepalivedBlock.render('vrrp_instance', data) %>
-<%     end -%>
-<%   end -%>
-<% end -%>
+<%= KeepalivedTemplate.render('vrrp_sync_group', vrrp_sync_groups) %>
 
-<% if vrrp_scripts.is_a? Array -%>
-<%   vrrp_scripts.each do |data| -%>
-<%     if data.is_a? Hash -%>
-<%= KeepalivedBlock.render('vrrp_script', data) %>
-<%     end -%>
-<%   end -%>
-<% end -%>
+<%= KeepalivedTemplate.render('vrrp_instance', vrrp_instances) %>
+
+<%= KeepalivedTemplate.render('vrrp_script', vrrp_scripts) %>
